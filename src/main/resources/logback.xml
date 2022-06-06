@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] [%-5level] %logger{36}.%M \(%line\) - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+       <!--  <file>D://Development/logs/im-admin.log</file> -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>C://Development/logs/%d{yyyyMMdd,aux}/im-admin-%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <!--
+            <totalSizeCap>100MB</totalSizeCap>
+            -->
+        </rollingPolicy>
+
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] [%-5level] %logger{36}.%M \(%line\) - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="warn"/>
+    <logger name="org.mybatis" level="warn"/>
+    <logger name="org.apache.axis" level="warn"/>
+    <logger name="org.quartz" level="warn"/>
+    <logger name="log4jdbc.debug" level="warn"/>
+
+    <logger name="BatchHistoryManageMapper" level="warn"/>
+    <logger name="BatchManageMapper" level="warn"/>
+    <logger name="EmployeeMapper" level="warn"/>
+    <logger name="HistoryMapper" level="warn"/>
+    <logger name="KorHRUserinfo" level="warn"/>
+    <logger name="PotalUserinfo" level="warn"/>
+    <logger name="SupplierMapper" level="warn"/>
+    <logger name="ApiMapper" level="warn"/>
+    <logger name="BatchJobMapper" level="warn"/>
+    <logger name="BatchSyncMapper" level="warn"/>
+    <logger name="KorHRBatchSyncMapper" level="warn"/>
+    <logger name="Office365UpdateTmpMapper" level="warn"/>
+    <logger name="VBuyerBatchSyncMapper" level="warn"/>
+    <logger name="CommonMapper" level="warn"/>
+    <logger name="AsisMigrationMapper" level="warn"/>
+    <logger name="MigrationMapper" level="warn"/>
+    <logger name="SilasMigrationMapper" level="warn"/>
+
+    <logger name="com.hanonsystems.im" level="debug"/>
+
+    <logger name="jdbc" level="off" />
+    <logger name="jdbc.sqlonly" level="debug" />
+    <logger name="jdbc.sqltiming" level="off" />
+    <logger name="jdbc.audit" level="off" />
+    <logger name="jdbc.resultset" level="off" />
+    <logger name="jdbc.resultsettable" level="debug" />
+    <logger name="jdbc.connection" level="off" />
+
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
