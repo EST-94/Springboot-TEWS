@@ -7,13 +7,11 @@ import javax.xml.rpc.ServiceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-import com.example.VO.TestVOforCreate;
+import com.example.VO.UserVO;
 
-import lombok.RequiredArgsConstructor;
 import tews6.wsdl.CreateUser;
 import tews6.wsdl.CreateUserProfileTab;
 import tews6.wsdl.CreateUserSearch;
@@ -41,7 +39,7 @@ public class TewsServiceImpl implements TewsService {
 	
 	private static Logger logger = LoggerFactory.getLogger(TewsService.class);
 	
-	public boolean tewsCreateUser(TestVOforCreate userVO) throws ServiceException, ImsException, RemoteException {
+	public boolean tewsCreateUser(UserVO userVO) throws ServiceException, ImsException, RemoteException {
 		
 		logger.debug("tewsService - TEWS user Create started.");
 		
@@ -81,10 +79,37 @@ public class TewsServiceImpl implements TewsService {
 		
 		
 			// set my values
-		createUserProfileTab.set_PCT_USER_ID_PCT_(userVO.getUserid());
-		createUserProfileTab.set_PCT_FIRST_NAME_PCT_(userVO.getFirstname());
-		createUserProfileTab.set_PCT_LAST_NAME_PCT_(userVO.getLastname());
-		createUserProfileTab.set_PCT_FULL_NAME_PCT_(userVO.getFullname());
+		if(userVO.getUserid() != null && !("").equals(userVO.getUserid())) {
+			logger.info("From TewsServiceImpl - USERID set as : " + userVO.getUserid());
+			createUserProfileTab.set_PCT_USER_ID_PCT_(userVO.getUserid());
+		} else {
+			logger.error("From TewsServiceImpl - USERID values wrong. : " + userVO.getUserid());
+			createUserProfileTab.set_PCT_USER_ID_PCT_("");
+		}
+		
+		if(userVO.getFirstname() != null && !("").equals(userVO.getFirstname())) {
+			logger.info("From TewsServiceImpl - FIRSTNAME set as : " + userVO.getFirstname());
+			createUserProfileTab.set_PCT_FIRST_NAME_PCT_(userVO.getFirstname());
+		} else {
+			logger.error("From TewsServiceImpl - FIRSTNAME values wrong. : " + userVO.getFirstname());
+			createUserProfileTab.set_PCT_FIRST_NAME_PCT_("");
+		}
+		
+		if(userVO.getLastname() != null && !("").equals(userVO.getLastname())) {
+			logger.info("From TewsServiceImpl - LASTNAME set as : " + userVO.getLastname());
+			createUserProfileTab.set_PCT_LAST_NAME_PCT_(userVO.getLastname());
+		} else {
+			logger.error("From TewsServiceImpl - LASTNAME values wrong. : " + userVO.getLastname());
+			createUserProfileTab.set_PCT_LAST_NAME_PCT_("");
+		}
+			
+		if(userVO.getFullname() != null && !("").equals(userVO.getFullname())) {
+			logger.info("From TewsServiceImpl - FULLNAME set as : " + userVO.getFullname());
+			createUserProfileTab.set_PCT_FULL_NAME_PCT_(userVO.getFullname());
+		} else {
+			logger.error("From TewsServiceImpl - FULLNAME values wrong. : " + userVO.getFullname());
+			createUserProfileTab.set_PCT_FULL_NAME_PCT_("");
+		}
 		
 		
 		createUser.setCreateUserProfileTab(createUserProfileTab);
@@ -113,7 +138,7 @@ public class TewsServiceImpl implements TewsService {
 		return tewsReturn;
 	}
 
-	public boolean tewsModifyUser(TestVOforCreate userVO) throws Exception {
+	public boolean tewsModifyUser(UserVO userVO) throws Exception {
 		
 		logger.debug("tewsService - TEWS user Modify started.");
 		
@@ -164,7 +189,7 @@ public class TewsServiceImpl implements TewsService {
 		
 		// execute TEWS
 		
-		logger.info("Run TEWS : TASK_ModifyUser, User : ");
+		logger.info("Run TEWS : TASK_ModifyUser, User : " + userVO.getUserid());
 		
 		imsStatus = tews6PortType.modifyUser(taskContext, modifyUser);
 		
@@ -177,7 +202,7 @@ public class TewsServiceImpl implements TewsService {
 		return tewsReturn;
 	}
 	
-	public boolean tewsDeleteUser(TestVOforCreate userVO) throws ServiceException, ImsException, RemoteException {
+	public boolean tewsDeleteUser(UserVO userVO) throws ServiceException, ImsException, RemoteException {
 		
 		logger.debug("tewsService - TEWS user Delete started. targetUser : " + userVO.getUserid());
 		
@@ -234,6 +259,7 @@ public class TewsServiceImpl implements TewsService {
 			tewsReturn = true;
 		}
 		
+		logger.info("Run TEWS : TASK_DeleteUser, User : " + userVO.getUserid());
 		
 		
 		return tewsReturn;
