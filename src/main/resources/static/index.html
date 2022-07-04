@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta charset="UTF-8">
+			<title>TEWS simple tester</title>
+		</head>
+		<body>
+		
+			<form method="post" action="/receiver">
+				<fieldset>
+				    <legend>Set your account info (SHOUDNT CONTAIN NULL / "")</legend>
+				    <div>
+				      Userid : <input type="text" id="Userid" name="inputValue" checked>
+				    </div>
+				    <div>
+				      Fullname : <input type="text" id="Fullname" name="inputValue">
+				    </div>
+				    <div>
+				      Firstname : <input type="text" id="Firstname" name="inputValue">
+				    </div>
+				    <div>
+				      Lastname : <input type="text" id="Lastname" name="inputValue">
+				    </div>
+				</fieldset>
+			
+				<fieldset>
+				    <legend>Select a mode :</legend>
+				    <div>
+				      <input type="radio" id="Create" name="method" value="Create"
+				             checked>
+				      <label for="Create">Create</label>
+				    </div>
+				    <div>
+				      <input type="radio" id="Delete" name="method" value="Delete">
+				      <label for="Delete">Delete</label>
+				    </div>
+				    <div>
+				      <input type="radio" id="Modify" name="method" value="Modify">
+				      <label for="Modify">Modify</label>
+				    </div>
+				</fieldset>
+				<input type="submit" value="Run">
+			</form>
+			</br>
+			
+			1. Select mode from table.</br>
+			2. Check a result in your WAS console.
+			
+		</body>
+	</html>

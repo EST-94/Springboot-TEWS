@@ -1,18 +1,17 @@
 package com.example.config;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.VO.UserVO;
-import com.example.commons.CommandMap;
 import com.example.service.TestWebService;
 import com.example.tews.TewsServiceImpl;
 
@@ -23,107 +22,46 @@ public class WebController {
 	private TestWebService testWebService;
 	
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	final String DEBUG_MOD = "Y";
 	
-	@ResponseBody
 	@GetMapping("/")
 	public String mainPageFromWeb() {
 		
-		return "index";
+		logger.info("a User accessed to '/'.");
+		
+		return "index.html";
 	}
 	
-	@ResponseBody
-	@GetMapping("/create")
-	public String createUserFromWeb(Model model,
-			@RequestParam("") String userId,
-			@RequestParam("") String firstName,
-			@RequestParam("") String lastName,
-			@RequestParam("") String fullName) throws Exception {
+	//@PostMapping(value = "/receiver")
+	@RequestMapping(value = "/receiver", method = RequestMethod.POST)
+	public String receiver(
+			@RequestParam(value = "method", required = false) String method,
+			@RequestParam(value = "Userid", required = false) String userid,
+			@RequestParam(value = "Fullname", required = false) String fullname,
+			@RequestParam(value = "Firstname", required = false) String firstname,
+			@RequestParam(value = "Lastname", required = false) String lastname) throws Exception {
 		
-		Map<String, String> res;
-		String message;
-		CommandMap commandMap = new CommandMap();
-				
-		logger.info("just called '/create'.");
+		logger.info("a User accessed to '/receiver'. selected mod : ", method);
 		
-		// need to make setter from web - of commandmap
-		// if not so, it will remain as 'null' and make exception
+		UserVO userVO = new UserVO();
+		TewsServiceImpl tews = new TewsServiceImpl();
 		
-		commandMap.put("userid", userId);
-		commandMap.put("fullname", fullName);
-		commandMap.put("firstname", firstName);
-		commandMap.put("lastname", lastName);
-		
-		res = testWebService.createUser(commandMap);
-		logger.info("ended '/create'.");
-
-		if (res == null) {
-			res.put("result", "failed cuz result is null.");
+		if (DEBUG_MOD.equals("Y")) {
+			logger.debug("POSTED : ", 
+					method, " / ", userid, " / ", fullname, " / ", firstname, " / ", lastname);
 		} else {
-			res.put("result", "create request ended.");
-			model.addAttribute("resultBox", res.get("result"));
+			if(method.equals("Create")) {
+				tews.tewsCreateUser(userVO);
+			} else if (method.equals("Modify")) {
+				tews.tewsModifyUser(userVO);
+			} else if (method.equals("Delete")) {
+				tews.tewsDeleteUser(userVO);
+			}	
 		}
 		
-		message = res.get("result");
-		
-		return message;
+		return "result.html";
 	}
 	
-	@ResponseBody
-	@GetMapping("/modify")
-	public String modifyUserFromWeb(Model model) throws Exception {
-		
-		Map<String, String> res;
-		String message;
-		CommandMap commandMap = new CommandMap();
-				
-		logger.info("just called '/modify'.");
-		
-		// need to make setter from web - of commandmap
-		// if not so, it will remain as 'null' and make exception
-		
-		res = testWebService.modifyUser(commandMap);
-		logger.info("ended '/create'.");
-
-		if (res == null) {
-			res.put("result", "failed cuz result is null.");
-		} else {
-			res.put("result", "modify request ended.");
-			model.addAttribute("resultBox", res.get("result"));
-		}
-		
-		message = res.get("result");
-		
-		return message;
-		
-	}
-	
-	@ResponseBody
-	@GetMapping("/delete")
-	public String deleteUserFromWeb(Model model) throws Exception {
-		
-		Map<String, String> res;
-		String message;
-		CommandMap commandMap = new CommandMap();
-				
-		logger.info("just called '/delete'.");
-		
-		// need to make setter from web - of commandmap
-		// if not so, it will remain as 'null' and make exception
-		
-		res = testWebService.deleteUser(commandMap);
-		logger.info("ended '/create'.");
-
-		if (res == null) {
-			res.put("result", "failed cuz result is null.");
-		} else {
-			res.put("result", "delete request ended.");
-			model.addAttribute("resultBox", res.get("result"));
-		}
-		
-		message = res.get("result");
-		
-		return message;
-	}
 	
 	
 	@ResponseBody
@@ -137,10 +75,14 @@ public class WebController {
 		UserVO userVO = new UserVO();
 		TewsServiceImpl tews = new TewsServiceImpl();
 		
-		userVO.setUserid("TEWStester1111");
-		userVO.setFullname("FULLNAME");
-		userVO.setFirstname("FIRSTNAME");
-		userVO.setLastname("LASTNAME");
+		if (DEBUG_MOD.equals("Y")) {
+			userVO.setUserid("TEWStester1111");
+			userVO.setFullname("FULLNAME");
+			userVO.setFirstname("FIRSTNAME");
+			userVO.setLastname("LASTNAME");
+		} else {
+			
+		}
 		
 		logger.info("sample values are set from '/directcall'.");
 
