@@ -64,39 +64,39 @@ public class WebController {
 	
 	
 	
-	@ResponseBody
-	@GetMapping("/directcall")
-	public String directCaller() throws Exception {
-		
-		String res = "idle";
-		logger.info("just called '/directcall'. this is for create method.");
-		
-		
-		UserVO userVO = new UserVO();
-		TewsServiceImpl tews = new TewsServiceImpl();
-		
-		if (DEBUG_MOD.equals("Y")) {
-			userVO.setUserid("TEWStester1111");
-			userVO.setFullname("FULLNAME");
-			userVO.setFirstname("FIRSTNAME");
-			userVO.setLastname("LASTNAME");
-		} else {
-			
-		}
-		
-		logger.info("sample values are set from '/directcall'.");
-
-		if (tews.tewsCreateUser(userVO) == false) {
-			res = "sending with tews failed.";
-		} else {
-			res = "sending with tews success.";
-		}
-		
-		logger.info(res);
-		
-		
-		return res;
-	}
+//	@ResponseBody
+//	@GetMapping("/directcall")
+//	public String directCaller() throws Exception {
+//		
+//		String res = "idle";
+//		logger.info("just called '/directcall'. this is for create method.");
+//		
+//		
+//		UserVO userVO = new UserVO();
+//		TewsServiceImpl tews = new TewsServiceImpl();
+//		
+//		if (DEBUG_MOD.equals("Y")) {
+//			userVO.setUserid("TEWStester1111");
+//			userVO.setFullname("FULLNAME");
+//			userVO.setFirstname("FIRSTNAME");
+//			userVO.setLastname("LASTNAME");
+//		} else {
+//			
+//		}
+//		
+//		logger.info("sample values are set from '/directcall'.");
+//
+//		if (tews.tewsCreateUser(userVO) == false) {
+//			res = "sending with tews failed.";
+//		} else {
+//			res = "sending with tews success.";
+//		}
+//		
+//		logger.info(res);
+//		
+//		
+//		return res;
+//	}
 	
 	
 }
