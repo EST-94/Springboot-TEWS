@@ -2,76 +2,101 @@ package com.example.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.VO.TestVOforCreate;
-import com.example.service.TestUserCreateService;
+import com.example.VO.UserVO;
+import com.example.service.TestWebService;
 import com.example.tews.TewsServiceImpl;
-
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Controller
 @ComponentScan(basePackages = {"com.example.service"})
 public class WebController {
 	
-	@Autowired
-	//private final TestUserCreateService testUserCreateService;
-	private TestUserCreateService testUserCreateService;
+	private TestWebService testWebService;
 	
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	final String DEBUG_MOD = "Y";
 	
-	@GetMapping("/call")
-	public String tewsCaller() throws Exception {
+	@GetMapping("/")
+	public String mainPageFromWeb() {
 		
-		String res;
+		logger.info("a User accessed to '/'.");
 		
-		//CommandMap commandMap = new CommandMap();
-		
-		logger.info("just called '/call'.");
-		
-		res = testUserCreateService.createInit();
-		logger.info("ended '/call'.");
-
-		if (res == null) {
-			res = "failed cuz result is null.";
-		} 
-		
-		return res;
+		return "index.html";
 	}
 	
-	@GetMapping("/directcall")
-	public String tewsCaller2() throws Exception {
+	//@PostMapping(value = "/receiver")
+	@RequestMapping(value = "/receiver", method = RequestMethod.POST)
+	public String receiver(
+			@RequestParam(value = "method", required = false) String method,
+			@RequestParam(value = "Userid", required = false) String userid,
+			@RequestParam(value = "Fullname", required = false) String fullname,
+			@RequestParam(value = "Firstname", required = false) String firstname,
+			@RequestParam(value = "Lastname", required = false) String lastname) throws Exception {
 		
-		String res = "idle";
-		logger.info("just called '/directcall'.");
+		logger.info("a User accessed to '/receiver'. selected mod : ", method);
 		
-		
-		TestVOforCreate userVO = new TestVOforCreate();
+		UserVO userVO = new UserVO();
 		TewsServiceImpl tews = new TewsServiceImpl();
 		
-		userVO.setUserid((String) ("TEWStester1111"));
-		userVO.setFullname((String) ("FULLNAME"));
-		userVO.setFirstname((String) ("FIRSTNAME"));
-		userVO.setLastname((String) ("LASTNAME"));
-		
-		//tews.tewsCreateUser(userVO);
-		logger.info("ended '/directcall'.");
-
-		if (tews.tewsCreateUser(userVO) == false) {
-			res = "sending with tews failed.";
+		if (DEBUG_MOD.equals("Y")) {
+			logger.debug("POSTED : ", 
+					method, " / ", userid, " / ", fullname, " / ", firstname, " / ", lastname);
 		} else {
-			res = "sending with tews success.";
+			if(method.equals("Create")) {
+				tews.tewsCreateUser(userVO);
+			} else if (method.equals("Modify")) {
+				tews.tewsModifyUser(userVO);
+			} else if (method.equals("Delete")) {
+				tews.tewsDeleteUser(userVO);
+			}	
 		}
 		
-		logger.info(res);
-		
-		
-		return res;
+		return "result.html";
 	}
+	
+	
+	
+//	@ResponseBody
+//	@GetMapping("/directcall")
+//	public String directCaller() throws Exception {
+//		
+//		String res = "idle";
+//		logger.info("just called '/directcall'. this is for create method.");
+//		
+//		
+//		UserVO userVO = new UserVO();
+//		TewsServiceImpl tews = new TewsServiceImpl();
+//		
+//		if (DEBUG_MOD.equals("Y")) {
+//			userVO.setUserid("TEWStester1111");
+//			userVO.setFullname("FULLNAME");
+//			userVO.setFirstname("FIRSTNAME");
+//			userVO.setLastname("LASTNAME");
+//		} else {
+//			
+//		}
+//		
+//		logger.info("sample values are set from '/directcall'.");
+//
+//		if (tews.tewsCreateUser(userVO) == false) {
+//			res = "sending with tews failed.";
+//		} else {
+//			res = "sending with tews success.";
+//		}
+//		
+//		logger.info(res);
+//		
+//		
+//		return res;
+//	}
 	
 	
 }
