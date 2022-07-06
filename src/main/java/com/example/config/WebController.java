@@ -24,7 +24,7 @@ public class WebController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	final String DEBUG_MOD = "Y";
 	
-	@GetMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String mainPageFromWeb() {
 		
 		logger.info("a User accessed to '/'.");
@@ -32,7 +32,6 @@ public class WebController {
 		return "index.html";
 	}
 	
-	//@PostMapping(value = "/receiver")
 	@RequestMapping(value = "/receiver", method = RequestMethod.POST)
 	public String receiver(
 			@RequestParam(value = "method", required = false) String method,
