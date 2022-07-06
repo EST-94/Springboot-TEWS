@@ -49,6 +49,9 @@ public class WebController {
 			logger.debug("POSTED : ", 
 					method, " / ", userid, " / ", fullname, " / ", firstname, " / ", lastname);
 		} else {
+			
+			userVO.setAll(userid, firstname, lastname, fullname);
+			
 			if(method.equals("Create")) {
 				tews.tewsCreateUser(userVO);
 			} else if (method.equals("Modify")) {

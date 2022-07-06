@@ -20,4 +20,14 @@ public class UserVO implements Serializable {
 	private String lastname;
 	private String fullname;
 	
+	
+	public void setAll(String userid, String firstname, String lastname, String fullname) {
+		
+		this.userid = userid;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.fullname = fullname;
+		
+	}
+	
 }
